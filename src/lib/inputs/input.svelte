@@ -1,4 +1,5 @@
 <script>
+	/** @type {{ placeholder: string, image?: import('svelte').Component|null }}*/
 	let { placeholder, image = null } = $props();
 	let isActive = $state(false);
 </script>
@@ -12,6 +13,7 @@
 		type="text"
 		class="bg-transparent text-(--text) placeholder:text-(--border) border-none w-full outline-none"
 		{placeholder}
+		spellcheck="false"
 		onfocus={() => (isActive = true)}
 		onblur={() => (isActive = false)}
 	/>

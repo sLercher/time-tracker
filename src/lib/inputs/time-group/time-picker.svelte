@@ -3,7 +3,7 @@
 
 	import * as util from '$lib/inputs/time-group/time-picker-logic';
 
-	/** @type {{hour:string, minute:string}} */
+	/** @type {{ hour?: string, minute?: string}} */
 	let { hour = '', minute = '' } = $props();
 	/** The input for the hours. @type {HTMLInputElement}*/
 	let hourInput;
@@ -99,7 +99,7 @@
 		type="button"
 		onclick={useCurrentTime}
 		aria-label="Aktuelle Zeit verwenden"
-		class="flex items-center px-2 justify-center bg-transparent text-(--border) outline-none transition hover:text-(--text) focus:text-(--text)"
+		class="cursor-pointer flex items-center px-2 justify-center bg-transparent text-(--border) outline-none transition hover:text-(--text) focus:text-(--text)"
 	>
 		<Clock4 size="16" />
 	</button>
