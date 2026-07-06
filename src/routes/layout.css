@@ -1,0 +1,49 @@
+@import 'tailwindcss';
+/* @plugin '@tailwindcss/forms'; */
+@plugin '@tailwindcss/typography';
+
+:root {
+	--bg: #000000;
+	--surface: #141412;
+	--surface-raised: #424241;
+	--border: #43423e;
+	--text: #f6f6f6;
+	--muted: #dbd7d7;
+	--accent: #ff5600;
+	--accent-soft: #ff5600;
+	--danger: #de2626;
+}
+
+:global(html),
+:global(body) {
+	min-height: 100%;
+}
+
+:global(body) {
+	font-family: 'Manrope', sans-serif;
+	background: var(--wt-bg);
+	color: var(--wt-text);
+}
+
+:global(h1),
+:global(h2),
+:global(h3),
+:global(.display-font) {
+	font-family: 'Sora', sans-serif;
+}
+
+:global(::selection) {
+	background: color-mix(in oklab, var(--wt-accent) 45%, transparent);
+	color: var(--wt-text);
+}
+
+html,
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text)
+}
+
+body {
+    padding-top: env(safe-area-inset-top);
+}
