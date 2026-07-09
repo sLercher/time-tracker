@@ -1,42 +1,35 @@
-# sv
+# Time Tracker
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A simple personal time-tracking web app built with SvelteKit.
 
-## Creating a project
+This project was created for my own use to track how much time I spend on different projects each day. The focus is on simplicity, speed, and privacy.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Features
 
-```sh
-# create a new project
-npx sv create my-app
-```
+- Track time spent on projects
+- Add descriptions for completed work
+- View and review tracked entries
+- Store data locally in the browser
+- Works as a Progressive Web App (PWA)
+- No user accounts
+- No cloud synchronization
 
-To recreate this project with the same configuration:
+## Privacy
 
-```sh
-# recreate this project
-npx sv@0.16.2 create --template minimal --types jsdoc --add prettier eslint tailwindcss="plugins:typography,forms" drizzle="database:sqlite+sqlite:libsql" better-auth="demo:password" --install npm time-tracker
-```
+All data is stored locally in the browser using IndexedDB.
 
-## Developing
+The application does not:
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+- Send data to a server
+- Use analytics or tracking services
+- Collect personal information
+- Require an internet connection after installation
 
-```sh
-npm run dev
+Your data remains on the device where you use the application.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+## Tech-Stack
 
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+- SvelteKit
+- JavaScript
+- IndexedDB
+- GitHub Pages
