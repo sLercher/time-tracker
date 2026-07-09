@@ -19,25 +19,32 @@
 	/**
 	 * @type {{
 	 *   entries?: TimeEntry[],
+	 *   selectedDate?: string,
 	 *   activeEditId?: number | null,
 	 *   onEdit?: (entry: TimeEntry) => void,
 	 *   onDelete?: (entry: TimeEntry) => void
 	 * }}
 	 */
-	let { entries = [], activeEditId = null, onEdit = () => {}, onDelete = () => {} } = $props();
+	let {
+		entries = [],
+		selectedDate = '',
+		activeEditId = null,
+		onEdit = () => {},
+		onDelete = () => {}
+	} = $props();
 </script>
 
 <Card>
 	<div class="flex items-center justify-between">
-		<h2 class="text-sm font-semibold tracking-wider">Heute erfasst</h2>
+		<h2 class="text-sm font-semibold tracking-wider">Eintraege am {selectedDate}</h2>
 		<span class="text-xs text-(--muted)">{entries.length} Einträge</span>
 	</div>
 
 	{#if entries.length === 0}
-		<p class="text-sm text-(--muted)">Noch keine Einträge für heute.</p>
+		<p class="text-sm text-(--muted)">Keine Einträge für dieses Datum.</p>
 	{:else}
 		<div class="grid gap-2">
-			{#each entries as entry}
+			{#each entries as entry (entry.id)}
 				<div class="rounded-xl border border-(--border) bg-(--surface) px-3 py-3">
 					<div class="flex items-start justify-between gap-3">
 						<div class="min-w-0">

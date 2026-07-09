@@ -58,6 +58,7 @@ export function formatDuration(minutes) {
  * Validate and normalize a time tracking form for persistence.
  *
  * @param {{
+ *   date?: string,
  *   project: string,
  *   description: string,
  *   startHour: string,
@@ -105,7 +106,7 @@ export function validateAndBuildEntry(values) {
 	return {
 		ok: true,
 		data: {
-			date: getTodayDateKey(),
+			date: values.date || getTodayDateKey(),
 			project,
 			description,
 			startTime,

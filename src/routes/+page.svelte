@@ -33,6 +33,7 @@
 	let startMinute = $state('');
 	let endHour = $state('');
 	let endMinute = $state('');
+	let selectedDate = $state(getTodayDateKey());
 	let isSaving = $state(false);
 	let feedback = $state('');
 	/** @type {number | null} */
@@ -41,17 +42,28 @@
 	let todayEntries = $state([]);
 
 	/**
-	 * Load all entries for the current day.
+	 * Load all entries for the selected day.
 	 *
 	 * @returns {Promise<void>}
 	 */
-	async function loadTodayEntries() {
-		todayEntries = await getTimeEntriesByDate(getTodayDateKey());
+	async function loadEntriesForSelectedDate() {
+		todayEntries = await getTimeEntriesByDate(selectedDate);
 	}
 
 	onMount(async () => {
-		await loadTodayEntries();
+		await loadEntriesForSelectedDate();
 	});
+
+	/**
+	 * Handle date changes, refresh list, and leave edit mode.
+	 *
+	 * @returns {Promise<void>}
+	 */
+	async function handleDateChange() {
+		feedback = '';
+		resetForm();
+		await loadEntriesForSelectedDate();
+	}
 
 	/**
 	 * Reset all input fields and exit edit mode.
@@ -106,7 +118,7 @@
 				resetForm();
 			}
 
-			await loadTodayEntries();
+			await loadEntriesForSelectedDate();
 		} catch {
 			null; // because an empty catch statement shows an error in the IDE
 		}
@@ -122,6 +134,7 @@
 		feedback = '';
 
 		const result = validateAndBuildEntry({
+			date: selectedDate,
 			project,
 			description,
 			startHour,
@@ -147,7 +160,7 @@
 				await saveTimeEntry(result.data);
 			}
 
-			await loadTodayEntries();
+			await loadEntriesForSelectedDate();
 			resetForm();
 		} catch {
 			feedback = 'Speichern fehlgeschlagen. Bitte erneut versuchen.';
@@ -160,6 +173,19 @@
 <main
 	class="mx-auto flex min-h-screen w-full max-w-xl flex-col gap-4 px-4 pb-8 pt-6 sm:gap-5 sm:px-6 sm:pt-10"
 >
+	<div
+		class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 sm:px-5"
+	>
+		<label for="selected-date" class="text-sm font-semibold tracking-wider">Datum</label>
+		<input
+			id="selected-date"
+			bind:value={selectedDate}
+			onchange={handleDateChange}
+			type="date"
+			class="min-h-11 rounded-xl border border-(--border) bg-transparent px-3 text-(--text) outline-none"
+		/>
+	</div>
+
 	<ProjectCard bind:project bind:description />
 	<TimeCard
 		bind:startHour
@@ -174,6 +200,7 @@
 	/>
 	<TodayEntriesCard
 		entries={todayEntries}
+		{selectedDate}
 		activeEditId={editingEntryId}
 		onEdit={handleEditEntry}
 		onDelete={handleDeleteEntry}
