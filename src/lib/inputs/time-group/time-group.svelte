@@ -1,18 +1,20 @@
 <script>
 	// import Pause from '@lucide/svelte/icons/pause';
-	import Play from '@lucide/svelte/icons/play';
-	import Send from '@lucide/svelte/icons/send';
+	// import Play from '@lucide/svelte/icons/play';
+	// import Send from '@lucide/svelte/icons/send';
 
-	import Button from '$lib/inputs/time-group/button.svelte';
-	import DeltaInput from '$lib/inputs/time-group/delta-input.svelte';
-	import Time from '$lib/inputs/time-group/time.svelte';
+	import TimePicker from '$lib/inputs/time-group/time-picker.svelte';
+	import RangeContainer from '$lib/inputs/time-group/range-container.svelte';
 </script>
 
-<div class="flex gap-2 justify-between h-8">
-	<Button image={Play} variant="secondary" />
-	<Time />
-	<Time />
-	<DeltaInput />
-	<!-- TODO: duration -->
-	<Button image={Send} />
+<div class="grid grid-cols-3 gap-2">
+	<RangeContainer text="Start">
+		<TimePicker />
+	</RangeContainer>
+	<RangeContainer text="Ende">
+		<TimePicker />
+	</RangeContainer>
+	<RangeContainer text="Pause">
+		<TimePicker showButton={false} />
+	</RangeContainer>
 </div>

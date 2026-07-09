@@ -1,9 +1,11 @@
 <script>
-	/** @type {{ placeholder: string, image?: import('svelte').Component|null }}*/
-	let { placeholder, image = null } = $props();
+	/** @type {{ label:string, placeholder: string, image?: import('svelte').Component|null }}*/
+	let { label, placeholder, image = null } = $props();
 	let isActive = $state(false);
 </script>
 
+<div class="flex flex-col gap-1">
+<label for="" class="text-sm font-semibold">{label}</label>
 <div class="flex gap-2 rounded-xl bg-(--surface) border border-(--border) items-center px-4 py-2">
 	{#if image}
 		{@const Image = image}
@@ -17,4 +19,5 @@
 		onfocus={() => (isActive = true)}
 		onblur={() => (isActive = false)}
 	/>
+</div>
 </div>

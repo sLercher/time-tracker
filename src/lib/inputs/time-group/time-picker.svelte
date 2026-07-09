@@ -3,8 +3,8 @@
 
 	import * as util from '$lib/inputs/time-group/time-picker-logic';
 
-	/** @type {{ hour?: string, minute?: string}} */
-	let { hour = '', minute = '' } = $props();
+	/** @type {{ hour?: string, minute?: string, showButton?: boolean}} */
+	let { hour = '', minute = '', showButton = true } = $props();
 	/** The input for the hours. @type {HTMLInputElement}*/
 	let hourInput;
 	/** The input for the minuntes. @type {HTMLInputElement}*/
@@ -66,7 +66,7 @@
 </script>
 
 <div
-	class="grid grid-cols-[1fr_1fr_auto] h-full rounded-lg border border-(--border) bg-(--surface) text-(--text)"
+	class="grid grid-cols-[1fr_1fr_auto] h-12 rounded-lg border border-(--border) bg-(--surface) text-(--text)"
 >
 	<input
 		bind:this={hourInput}
@@ -78,7 +78,7 @@
 		inputmode="numeric"
 		placeholder="00"
 		aria-label="Stunden"
-		class="bg-transparent min-w-10 text-center text-sm font-light placeholder:text-(--border) outline-none focus:placeholder:text-(--text)"
+		class="bg-transparent min-w-10 text-center text-lg font-light placeholder:text-(--border) outline-none focus:placeholder:text-(--text)"
 	/>
 
 	<input
@@ -92,15 +92,19 @@
 		inputmode="numeric"
 		placeholder="00"
 		aria-label="Minuten"
-		class="border-x border-(--border) bg-transparent min-w-10 text-center text-sm font-light placeholder:text-(--border) outline-none focus:placeholder:text-(--text)"
+		class="{showButton
+			? `border-x`
+			: `border-l`} border-(--border) bg-transparent min-w-10 text-center text-lg font-light placeholder:text-(--border) outline-none focus:placeholder:text-(--text)"
 	/>
 
-	<button
-		type="button"
-		onclick={useCurrentTime}
-		aria-label="Aktuelle Zeit verwenden"
-		class="cursor-pointer flex items-center px-2 justify-center bg-transparent text-(--border) outline-none transition hover:text-(--text) focus:text-(--text)"
-	>
-		<Clock4 size="16" />
-	</button>
+	{#if showButton}
+		<button
+			type="button"
+			onclick={useCurrentTime}
+			aria-label="Aktuelle Zeit verwenden"
+			class="cursor-pointer flex items-center px-2 justify-center bg-transparent text-(--border) outline-none transition hover:text-(--text) focus:text-(--text)"
+		>
+			<Clock4 size="16" />
+		</button>
+	{/if}
 </div>

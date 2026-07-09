@@ -1,7 +1,9 @@
 <script>
-	import TimeChart from '$lib/time-chart.svelte';
+	import ProjectCard from '$lib/project-card.svelte';
+	import TimeCard from '$lib/time-card.svelte';
 </script>
 
 <div>
-	<TimeChart />
+	<ProjectCard />
+	<TimeCard />
 </div>
