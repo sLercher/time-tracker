@@ -6,6 +6,8 @@
 	import TodayEntriesCard from '$lib/today-entries-card.svelte';
 	import { deleteTimeEntry, getTimeEntriesByDate, saveTimeEntry, updateTimeEntry } from '$lib/db';
 	import {
+		formatElapsedDuration,
+		getCurrentTimeParts,
 		getTodayDateKey,
 		splitTime,
 		validateAndBuildEntry
@@ -35,11 +37,36 @@
 	let endMinute = $state('');
 	let selectedDate = $state(getTodayDateKey());
 	let isSaving = $state(false);
+	let isTracking = $state(false);
+	let isPaused = $state(false);
+	let accumulatedActiveMs = $state(0);
+	/** @type {number | null} */
+	let runStartedAtMs = $state(null);
+	/** @type {number | null} */
+	let pauseStartedAtMs = $state(null);
+	let timerNowMs = $state(Date.now());
 	let feedback = $state('');
 	/** @type {number | null} */
 	let editingEntryId = $state(null);
 	/** @type {TimeEntry[]} */
 	let todayEntries = $state([]);
+	let isInputLocked = $derived(isPaused);
+	let activeDurationLabel = $derived.by(() => {
+		let activeMs = accumulatedActiveMs;
+
+		if (isTracking && !isPaused && runStartedAtMs !== null) {
+			activeMs += timerNowMs - runStartedAtMs;
+		}
+
+		return formatElapsedDuration(activeMs);
+	});
+	let pausedDurationLabel = $derived.by(() => {
+		if (!isTracking || !isPaused || pauseStartedAtMs === null) {
+			return formatElapsedDuration(0);
+		}
+
+		return formatElapsedDuration(timerNowMs - pauseStartedAtMs);
+	});
 
 	/**
 	 * Load all entries for the selected day.
@@ -50,9 +77,28 @@
 		todayEntries = await getTimeEntriesByDate(selectedDate);
 	}
 
-	onMount(async () => {
-		await loadEntriesForSelectedDate();
+	onMount(() => {
+		const timer = setInterval(() => {
+			timerNowMs = Date.now();
+		}, 1000);
+
+		loadEntriesForSelectedDate();
+
+		return () => {
+			clearInterval(timer);
+		};
 	});
+
+	/**
+	 * Reset all tracking-session timing state.
+	 */
+	function resetTrackingState() {
+		isTracking = false;
+		isPaused = false;
+		accumulatedActiveMs = 0;
+		runStartedAtMs = null;
+		pauseStartedAtMs = null;
+	}
 
 	/**
 	 * Handle date changes, refresh list, and leave edit mode.
@@ -61,6 +107,7 @@
 	 */
 	async function handleDateChange() {
 		feedback = '';
+		resetTrackingState();
 		resetForm();
 		await loadEntriesForSelectedDate();
 	}
@@ -87,6 +134,8 @@
 		const [entryStartHour, entryStartMinute] = splitTime(entry.startTime);
 		const [entryEndHour, entryEndMinute] = splitTime(entry.endTime);
 
+		resetTrackingState();
+
 		editingEntryId = entry.id;
 		project = entry.project;
 		description = entry.description;
@@ -101,6 +150,7 @@
 	 */
 	function handleCancelEdit() {
 		feedback = '';
+		resetTrackingState();
 		resetForm();
 	}
 
@@ -125,12 +175,153 @@
 	}
 
 	/**
+	 * Set start input values to the current local time.
+	 */
+	function setStartToNow() {
+		[startHour, startMinute] = getCurrentTimeParts();
+	}
+
+	/**
+	 * Set end input values to the current local time.
+	 */
+	function setEndToNow() {
+		[endHour, endMinute] = getCurrentTimeParts();
+	}
+
+	/**
+	 * Save the current form values as a new entry (without update mode).
+	 *
+	 * @returns {Promise<boolean>} True if the interval was saved.
+	 */
+	async function saveCurrentInterval() {
+		const result = validateAndBuildEntry({
+			date: selectedDate,
+			project,
+			description,
+			startHour,
+			startMinute,
+			endHour,
+			endMinute
+		});
+
+		if (!result.ok) {
+			feedback = result.message;
+			return false;
+		}
+
+		await saveTimeEntry(result.data);
+		await loadEntriesForSelectedDate();
+		return true;
+	}
+
+	/**
+	 * Start tracking from now or stop tracking and save the active interval.
+	 *
+	 * @returns {Promise<void>}
+	 */
+	async function handleToggleTracking() {
+		if (isSaving || editingEntryId !== null) return;
+		feedback = '';
+
+		if (!isTracking) {
+			setStartToNow();
+			endHour = '';
+			endMinute = '';
+			accumulatedActiveMs = 0;
+			runStartedAtMs = Date.now();
+			pauseStartedAtMs = null;
+			isTracking = true;
+			isPaused = false;
+			return;
+		}
+
+		if (isPaused) {
+			resetTrackingState();
+			resetForm();
+			return;
+		}
+
+		setEndToNow();
+		isSaving = true;
+
+		try {
+			const saved = await saveCurrentInterval();
+
+			if (!saved) {
+				endHour = '';
+				endMinute = '';
+				return;
+			}
+
+			if (runStartedAtMs !== null) {
+				accumulatedActiveMs += Date.now() - runStartedAtMs;
+			}
+
+			resetTrackingState();
+			resetForm();
+		} catch {
+			feedback = 'Speichern fehlgeschlagen. Bitte erneut versuchen.';
+		} finally {
+			isSaving = false;
+		}
+	}
+
+	/**
+	 * Pause active tracking by saving the current interval, or resume from now.
+	 *
+	 * @returns {Promise<void>}
+	 */
+	async function handleTogglePause() {
+		if (isSaving || editingEntryId !== null || !isTracking) return;
+		feedback = '';
+
+		if (isPaused) {
+			setStartToNow();
+			endHour = '';
+			endMinute = '';
+			runStartedAtMs = Date.now();
+			pauseStartedAtMs = null;
+			isPaused = false;
+			return;
+		}
+
+		setEndToNow();
+		isSaving = true;
+
+		try {
+			const saved = await saveCurrentInterval();
+
+			if (!saved) {
+				endHour = '';
+				endMinute = '';
+				return;
+			}
+
+			if (runStartedAtMs !== null) {
+				accumulatedActiveMs += Date.now() - runStartedAtMs;
+			}
+
+			runStartedAtMs = null;
+			pauseStartedAtMs = Date.now();
+			startHour = '';
+			startMinute = '';
+			endHour = '';
+			endMinute = '';
+			isPaused = true;
+		} catch {
+			feedback = 'Speichern fehlgeschlagen. Bitte erneut versuchen.';
+		} finally {
+			isSaving = false;
+		}
+	}
+
+	/**
 	 * Validate the form values and persist a time entry locally in IndexedDB.
 	 *
 	 * @returns {Promise<void>}
 	 */
 	async function handleSave() {
-		if (isSaving) return;
+		if (isSaving || isTracking) return;
 		feedback = '';
 
 		const result = validateAndBuildEntry({
@@ -181,21 +372,29 @@
 			id="selected-date"
 			bind:value={selectedDate}
 			onchange={handleDateChange}
+			disabled={isInputLocked}
 			type="date"
-			class="min-h-11 rounded-xl border border-(--border) bg-transparent px-3 text-(--text) outline-none"
+			class="min-h-11 rounded-xl border border-(--border) bg-transparent px-3 text-(--text) outline-none disabled:cursor-not-allowed disabled:opacity-60"
 		/>
 	</div>
 
-	<ProjectCard bind:project bind:description />
+	<ProjectCard bind:project bind:description disabled={isInputLocked} />
 	<TimeCard
 		bind:startHour
 		bind:startMinute
 		bind:endHour
 		bind:endMinute
 		{isSaving}
+		{isTracking}
+		{isPaused}
+		{isInputLocked}
+		{activeDurationLabel}
+		{pausedDurationLabel}
 		{feedback}
 		isEditing={editingEntryId !== null}
 		onCancelEdit={handleCancelEdit}
+		onToggleTracking={handleToggleTracking}
+		onTogglePause={handleTogglePause}
 		onSave={handleSave}
 	/>
 	<TodayEntriesCard

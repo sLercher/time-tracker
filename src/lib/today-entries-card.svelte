@@ -36,8 +36,10 @@
 
 <Card>
 	<div class="flex items-center justify-between">
-		<h2 class="text-sm font-semibold tracking-wider">Eintraege am {selectedDate}</h2>
-		<span class="text-xs text-(--muted)">{entries.length} Einträge</span>
+		<h2 class="text-sm font-semibold tracking-wider">Einträge vom {selectedDate}</h2>
+		<span class="text-xs text-(--muted)">
+			{entries.length === 1 ? `${entries.length} Eintrag` : `${entries.length} Einträge`}
+		</span>
 	</div>
 
 	{#if entries.length === 0}

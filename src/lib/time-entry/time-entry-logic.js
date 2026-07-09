@@ -34,6 +34,18 @@ export function splitTime(value) {
 }
 
 /**
+ * Get the current local time in HH:MM parts.
+ *
+ * @returns {[string, string]} Current local time as [hour, minute].
+ */
+export function getCurrentTimeParts() {
+	const now = new Date();
+	const hour = String(now.getHours()).padStart(2, '0');
+	const minute = String(now.getMinutes()).padStart(2, '0');
+	return [hour, minute];
+}
+
+/**
  * Format duration minutes into a compact display string.
  *
  * @param {number} minutes - Duration in minutes.
@@ -52,6 +64,21 @@ export function formatDuration(minutes) {
 	}
 
 	return `${hours}h ${restMinutes}m`;
+}
+
+/**
+ * Format elapsed milliseconds as HH:MM:SS.
+ *
+ * @param {number} elapsedMs - Milliseconds to format.
+ * @returns {string} Formatted elapsed string.
+ */
+export function formatElapsedDuration(elapsedMs) {
+	const totalSeconds = Math.max(0, Math.floor(elapsedMs / 1000));
+	const hours = Math.floor(totalSeconds / 3600);
+	const minutes = Math.floor((totalSeconds % 3600) / 60);
+	const seconds = totalSeconds % 60;
+
+	return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
 /**

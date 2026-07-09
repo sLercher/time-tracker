@@ -11,22 +11,24 @@
 	 *   startHour?: string,
 	 *   startMinute?: string,
 	 *   endHour?: string,
-	 *   endMinute?: string
+	 *   endMinute?: string,
+	 *   disabled?: boolean
 	 * }}
 	 */
 	let {
 		startHour = $bindable(''),
 		startMinute = $bindable(''),
 		endHour = $bindable(''),
-		endMinute = $bindable('')
+		endMinute = $bindable(''),
+		disabled = false
 	} = $props();
 </script>
 
 <div class="mt-1 grid grid-cols-2 gap-3">
 	<RangeContainer text="Start">
-		<TimePicker bind:hour={startHour} bind:minute={startMinute} />
+		<TimePicker bind:hour={startHour} bind:minute={startMinute} {disabled} />
 	</RangeContainer>
 	<RangeContainer text="Ende">
-		<TimePicker bind:hour={endHour} bind:minute={endMinute} />
+		<TimePicker bind:hour={endHour} bind:minute={endMinute} {disabled} />
 	</RangeContainer>
 </div>

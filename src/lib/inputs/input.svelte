@@ -1,6 +1,6 @@
 <script>
-	/** @type {{ label:string, placeholder: string, value?: string, image?: import('svelte').Component|null }}*/
-	let { label, placeholder, value = $bindable(''), image = null } = $props();
+	/** @type {{ label:string, placeholder: string, value?: string, disabled?: boolean, image?: import('svelte').Component|null }}*/
+	let { label, placeholder, value = $bindable(''), disabled = false, image = null } = $props();
 	let isActive = $state(false);
 	let inputId = $derived(`input-${label.toLowerCase().replace(/\s+/g, '-')}`);
 </script>
@@ -21,8 +21,9 @@
 		<input
 			id={inputId}
 			bind:value
+			{disabled}
 			type="text"
-			class="w-full border-none bg-transparent text-(--text) outline-none placeholder:text-(--border)"
+			class="w-full border-none bg-transparent text-(--text) outline-none placeholder:text-(--border) disabled:cursor-not-allowed disabled:opacity-60"
 			{placeholder}
 			spellcheck="false"
 			onfocus={() => (isActive = true)}
