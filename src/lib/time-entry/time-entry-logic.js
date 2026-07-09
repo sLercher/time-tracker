@@ -23,6 +23,38 @@ export function toMinutes(hour, minute) {
 }
 
 /**
+ * Split a HH:MM time string into hour and minute parts.
+ *
+ * @param {string} value - Time string in HH:MM format.
+ * @returns {[string, string]} Tuple in [hour, minute] format.
+ */
+export function splitTime(value) {
+	const [hour = '', minute = ''] = value.split(':');
+	return [hour, minute];
+}
+
+/**
+ * Format duration minutes into a compact display string.
+ *
+ * @param {number} minutes - Duration in minutes.
+ * @returns {string} Readable duration text.
+ */
+export function formatDuration(minutes) {
+	const hours = Math.floor(minutes / 60);
+	const restMinutes = minutes % 60;
+
+	if (hours === 0) {
+		return `${restMinutes}m`;
+	}
+
+	if (restMinutes === 0) {
+		return `${hours}h`;
+	}
+
+	return `${hours}h ${restMinutes}m`;
+}
+
+/**
  * Validate and normalize a time tracking form for persistence.
  *
  * @param {{

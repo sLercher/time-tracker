@@ -12,7 +12,11 @@
 	>
 		{#if image}
 			{@const Image = image}
-			<Image size="20" color={isActive ? 'var(--accent-soft)' : 'var(--border)'} />
+			<Image
+				size="20"
+				class="transition"
+				color={isActive ? 'var(--accent-soft)' : 'var(--border)'}
+			/>
 		{/if}
 		<input
 			id={inputId}
