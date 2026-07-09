@@ -4,7 +4,7 @@
 	import * as util from '$lib/inputs/time-group/time-picker-logic';
 
 	/** @type {{ hour?: string, minute?: string, showButton?: boolean}} */
-	let { hour = '', minute = '', showButton = true } = $props();
+	let { hour = $bindable(''), minute = $bindable(''), showButton = true } = $props();
 	/** The input for the hours. @type {HTMLInputElement}*/
 	let hourInput;
 	/** The input for the minuntes. @type {HTMLInputElement}*/
@@ -66,7 +66,7 @@
 </script>
 
 <div
-	class="grid grid-cols-[1fr_1fr_auto] h-12 rounded-lg border border-(--border) bg-(--surface) text-(--text)"
+	class="grid h-12 grid-cols-[1fr_1fr_auto] rounded-xl border border-(--border) bg-(--surface) text-(--text)"
 >
 	<input
 		bind:this={hourInput}
@@ -78,7 +78,7 @@
 		inputmode="numeric"
 		placeholder="00"
 		aria-label="Stunden"
-		class="bg-transparent min-w-10 text-center text-lg font-light placeholder:text-(--border) outline-none focus:placeholder:text-(--text)"
+		class="min-w-10 bg-transparent px-1 text-center text-lg font-light outline-none placeholder:text-(--border) focus:placeholder:text-(--text)"
 	/>
 
 	<input
@@ -94,7 +94,7 @@
 		aria-label="Minuten"
 		class="{showButton
 			? `border-x`
-			: `border-l`} border-(--border) bg-transparent min-w-10 text-center text-lg font-light placeholder:text-(--border) outline-none focus:placeholder:text-(--text)"
+			: `border-l`} min-w-10 border-(--border) bg-transparent px-1 text-center text-lg font-light outline-none placeholder:text-(--border) focus:placeholder:text-(--text)"
 	/>
 
 	{#if showButton}
@@ -102,7 +102,7 @@
 			type="button"
 			onclick={useCurrentTime}
 			aria-label="Aktuelle Zeit verwenden"
-			class="cursor-pointer flex items-center px-2 justify-center bg-transparent text-(--border) outline-none transition hover:text-(--text) focus:text-(--text)"
+			class="flex cursor-pointer items-center justify-center bg-transparent px-2 text-(--border) outline-none transition hover:text-(--text) focus:text-(--text)"
 		>
 			<Clock4 size="16" />
 		</button>

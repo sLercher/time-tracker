@@ -5,16 +5,28 @@
 
 	import TimePicker from '$lib/inputs/time-group/time-picker.svelte';
 	import RangeContainer from '$lib/inputs/time-group/range-container.svelte';
+
+	/**
+	 * @type {{
+	 *   startHour?: string,
+	 *   startMinute?: string,
+	 *   endHour?: string,
+	 *   endMinute?: string
+	 * }}
+	 */
+	let {
+		startHour = $bindable(''),
+		startMinute = $bindable(''),
+		endHour = $bindable(''),
+		endMinute = $bindable('')
+	} = $props();
 </script>
 
-<div class="grid grid-cols-3 gap-2">
+<div class="mt-1 grid grid-cols-2 gap-3">
 	<RangeContainer text="Start">
-		<TimePicker />
+		<TimePicker bind:hour={startHour} bind:minute={startMinute} />
 	</RangeContainer>
 	<RangeContainer text="Ende">
-		<TimePicker />
-	</RangeContainer>
-	<RangeContainer text="Pause">
-		<TimePicker showButton={false} />
+		<TimePicker bind:hour={endHour} bind:minute={endMinute} />
 	</RangeContainer>
 </div>
