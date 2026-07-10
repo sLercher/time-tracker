@@ -141,7 +141,7 @@ export function validateAndBuildEntry(values) {
 			startMinutes,
 			endMinutes,
 			durationMinutes: endMinutes - startMinutes,
-			createdAt: new Date().toISOString(),
-		},
+			createdAt: new Date().toISOString()
+		}
 	};
 }

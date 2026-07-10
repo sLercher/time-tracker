@@ -3,7 +3,7 @@ import Dexie from 'dexie';
 export const db = new Dexie('time-management-db');
 
 db.version(1).stores({
-	['timeEntries']: '++id,date,project,startTime,endTime,createdAt',
+	['timeEntries']: '++id,date,project,startTime,endTime,createdAt'
 });
 
 /**
