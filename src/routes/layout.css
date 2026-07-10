@@ -3,22 +3,24 @@
 @plugin '@tailwindcss/typography';
 
 @layer base {
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+	input[type='number']::-webkit-inner-spin-button,
+	input[type='number']::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
 }
 
 :root {
-	--bg: #000000;
-	--surface: #141412;
-	--surface-raised: #424241;
-	--border: #43423e;
-	--text: #f6f6f6;
-	--muted: #dbd7d7;
-	--accent: #ff5600;
-	--accent-soft: #ff5600;
+	--bg: #090b0c;
+	--surface: #161b1d;
+	--surface-raised: #272c2e;
+	--border: #222222;
+	--ring: #67787c;
+	--text: #ecf6fa;
+	--text-accent: #733e0a;
+	--muted: #9ca8ab;
+	--accent: #f0b100;
+	--accent-soft: #c49206;
 	--danger: #de2626;
 }
 
@@ -47,11 +49,19 @@
 
 html,
 body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text)
+	margin: 0;
+	background: var(--bg);
+	color: var(--text);
 }
 
 body {
-    padding-top: env(safe-area-inset-top);
+	padding-top: env(safe-area-inset-top);
+}
+
+input[type='date'] {
+	color-scheme: dark;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+	cursor: pointer;
 }

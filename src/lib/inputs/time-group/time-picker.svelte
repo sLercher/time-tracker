@@ -1,19 +1,22 @@
 <script>
 	import Clock4 from '@lucide/svelte/icons/clock-4';
 
+	import TimePickerInput from '$lib/inputs/time-group/time-picker-input.svelte';
 	import * as util from '$lib/inputs/time-group/time-picker-logic';
 
-	/** @type {{ hour?: string, minute?: string, showButton?: boolean, disabled?: boolean}} */
-	let {
-		hour = $bindable(''),
-		minute = $bindable(''),
-		showButton = true,
-		disabled = false
-	} = $props();
-	/** The input for the hours. @type {HTMLInputElement}*/
-	let hourInput;
-	/** The input for the minuntes. @type {HTMLInputElement}*/
-	let minuteInput;
+	/**
+	 * @type {{
+	 * hour?: string
+	 * minute?: string
+	 * disabled?: boolean
+	 * }}
+	 * */
+	let { hour = $bindable(''), minute = $bindable(''), disabled = false } = $props();
+
+	/** The input for the hours. @type {HTMLInputElement | undefined}*/
+	let hourInput = $state();
+	/** The input for the minuntes. @type {HTMLInputElement | undefined}*/
+	let minuteInput = $state();
 
 	/**
 	 * Handles the hour input event.
@@ -71,48 +74,34 @@
 </script>
 
 <div
-	class="grid h-12 grid-cols-[1fr_1fr_auto] rounded-xl border border-(--border) bg-(--surface) text-(--text)"
+	class="grid h-10 grid-cols-[1fr_auto_1fr_auto] rounded-lg bg-(--surface-raised) text-(--text) items-center"
 >
-	<input
-		bind:this={hourInput}
+	<TimePickerInput
+		bind:input={hourInput}
 		bind:value={hour}
 		{disabled}
-		maxlength="2"
-		oninput={handleHourInput}
-		onblur={handleHourBlur}
-		type="text"
-		inputmode="numeric"
-		placeholder="00"
-		aria-label="Stunden"
-		class="min-w-10 bg-transparent px-1 text-center text-lg font-light outline-none placeholder:text-(--border) focus:placeholder:text-(--text) disabled:cursor-not-allowed disabled:opacity-60"
+		ariaLabel="Stunden"
+		handleInput={handleHourInput}
+		handleBlur={handleHourBlur}
 	/>
-
-	<input
-		bind:this={minuteInput}
+	<p class="text-sm text-(--ring)">:</p>
+	<TimePickerInput
+		bind:input={minuteInput}
 		bind:value={minute}
 		{disabled}
-		maxlength="2"
-		oninput={handleMinuteInput}
-		onblur={handleMinuteBlur}
-		onkeydown={handleMinuteKeydown}
-		type="text"
-		inputmode="numeric"
-		placeholder="00"
-		aria-label="Minuten"
-		class="{showButton
-			? `border-x`
-			: `border-l`} min-w-10 border-(--border) bg-transparent px-1 text-center text-lg font-light outline-none placeholder:text-(--border) focus:placeholder:text-(--text) disabled:cursor-not-allowed disabled:opacity-60"
+		ariaLabel="Minuten"
+		handleInput={handleMinuteInput}
+		handleBlur={handleMinuteBlur}
+		handleKeyDown={handleMinuteKeydown}
 	/>
 
-	{#if showButton}
-		<button
-			type="button"
-			onclick={useCurrentTime}
-			{disabled}
-			aria-label="Aktuelle Zeit verwenden"
-			class="flex cursor-pointer items-center justify-center bg-transparent px-2 text-(--border) outline-none transition hover:text-(--text) focus:text-(--text) disabled:cursor-not-allowed disabled:opacity-60"
-		>
-			<Clock4 size="16" />
-		</button>
-	{/if}
+	<button
+		type="button"
+		onclick={useCurrentTime}
+		{disabled}
+		aria-label="Aktuelle Zeit verwenden"
+		class="flex cursor-pointer items-center justify-center bg-transparent px-2 text-(--text) outline-none transition hover:text-(--accent) focus:text-(--text) disabled:cursor-not-allowed disabled:opacity-60"
+	>
+		<Clock4 size="16" />
+	</button>
 </div>

@@ -2,7 +2,9 @@
 	import BriefcaseBusiness from '@lucide/svelte/icons/briefcase-business';
 	import TextAlignStart from '@lucide/svelte/icons/text-align-start';
 
-	import Card from '$lib/card.svelte';
+	import Card from '$lib/card/card.svelte';
+	import CardHeader from '$lib/card/card-header.svelte';
+	import CardDescription from '$lib/card/card-description.svelte';
 	import Input from '$lib/inputs/input.svelte';
 
 	/**
@@ -12,7 +14,14 @@
 </script>
 
 <Card>
-	<h2 class="text-sm font-semibold tracking-wider">Tätigkeit</h2>
+	<div>
+		<CardHeader>Tätigkeit</CardHeader>
+		<CardDescription>
+			Bestimmen Sie das Projekt an dem Sie gerade arbeiten. Optional kann eine Beschreibung der
+			Tätigkeit angegeben werden.
+		</CardDescription>
+	</div>
+
 	<div class="mt-1 grid gap-3">
 		<Input
 			label="Projekt"

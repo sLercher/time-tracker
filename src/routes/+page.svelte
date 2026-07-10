@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 
+	import DateCard from '$lib/date-card.svelte';
 	import ProjectCard from '$lib/project-card.svelte';
 	import TimeCard from '$lib/time-card.svelte';
 	import TodayEntriesCard from '$lib/today-entries-card.svelte';
@@ -364,20 +365,7 @@
 <main
 	class="mx-auto flex min-h-screen w-full max-w-xl flex-col gap-4 px-4 pb-8 pt-6 sm:gap-5 sm:px-6 sm:pt-10"
 >
-	<div
-		class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 sm:px-5"
-	>
-		<label for="selected-date" class="text-sm font-semibold tracking-wider">Datum</label>
-		<input
-			id="selected-date"
-			bind:value={selectedDate}
-			onchange={handleDateChange}
-			disabled={isInputLocked}
-			type="date"
-			class="min-h-11 rounded-xl border border-(--border) bg-transparent px-3 text-(--text) outline-none disabled:cursor-not-allowed disabled:opacity-60"
-		/>
-	</div>
-
+	<DateCard bind:selectedDate {isInputLocked} onChange={handleDateChange}></DateCard>
 	<ProjectCard bind:project bind:description disabled={isInputLocked} />
 	<TimeCard
 		bind:startHour

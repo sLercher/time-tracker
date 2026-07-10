@@ -2,7 +2,9 @@
 	import Trash2 from '@lucide/svelte/icons/trash-2';
 	import Pencil from '@lucide/svelte/icons/pencil';
 
-	import Card from '$lib/card.svelte';
+	import Button from '$lib/inputs/button.svelte';
+	import Card from '$lib/card/card.svelte';
+	import CardHeader from '$lib/card/card-header.svelte';
 	import { formatDuration } from '$lib/time-entry/time-entry-logic';
 
 	/**
@@ -36,7 +38,9 @@
 
 <Card>
 	<div class="flex items-center justify-between">
-		<h2 class="text-sm font-semibold tracking-wider">Einträge vom {selectedDate}</h2>
+		<CardHeader>
+			Einträge vom {selectedDate}
+		</CardHeader>
 		<span class="text-xs text-(--muted)">
 			{entries.length === 1 ? `${entries.length} Eintrag` : `${entries.length} Einträge`}
 		</span>
@@ -56,22 +60,14 @@
 							{/if}
 						</div>
 						<div class="flex items-center gap-1">
-							<button
-								type="button"
-								onclick={() => onEdit(entry)}
-								class="inline-flex h-8 items-center gap-1 rounded-lg border border-(--border) px-2 text-xs font-medium text-(--text) transition hover:border-(--accent)"
-							>
+							<Button onClick={() => onEdit(entry)} variant="secondary" size="small">
 								<Pencil size="14" />
 								{activeEditId === entry.id ? 'Aktiv' : 'Bearbeiten'}
-							</button>
-							<button
-								type="button"
-								onclick={() => onDelete(entry)}
-								class="inline-flex h-8 items-center rounded-lg border border-(--border) px-2 text-xs font-medium text-(--text) transition hover:border-(--danger) hover:text-(--danger)"
-								aria-label="Eintrag löschen"
-							>
+							</Button>
+
+							<Button onClick={() => onDelete(entry)} variant="danger" size="small">
 								<Trash2 size="14" />
-							</button>
+							</Button>
 						</div>
 					</div>
 					<div class="mt-2 flex items-center justify-between text-xs text-(--muted)">

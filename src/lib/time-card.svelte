@@ -3,8 +3,11 @@
 	import Play from '@lucide/svelte/icons/play';
 	import Square from '@lucide/svelte/icons/square';
 
-	import Card from '$lib/card.svelte';
+	import Card from '$lib/card/card.svelte';
+	import CardHeader from '$lib/card/card-header.svelte';
+	import CardDescription from '$lib/card/card-description.svelte';
 	import TimeGroup from '$lib/inputs/time-group/time-group.svelte';
+	import Button from '$lib/inputs/button.svelte';
 
 	/**
 	 * @type {{
@@ -47,9 +50,44 @@
 </script>
 
 <Card>
-	<h2 class="text-sm font-semibold tracking-wider">
-		{isEditing ? 'Eintrag bearbeiten' : 'Zeiterfassung'}
-	</h2>
+	<div>
+		<CardHeader>
+			{isEditing ? 'Eintrag bearbeiten' : 'Zeiterfassung'}
+		</CardHeader>
+		<CardDescription>
+			Definieren Sie die Start- und Endzeit und speichern Sie die gebuchte Zeit. Über die Buttons
+			können die Start- und Endzeiten automatisch wie mit einer Stoppuhr getrackt werden und Pausen
+			berücksichtigt werden.
+		</CardDescription>
+	</div>
+	<TimeGroup bind:startHour bind:startMinute bind:endHour bind:endMinute disabled={isInputLocked} />
+	<div class="mt-1 grid {isEditing ? 'grid-cols-2' : ''} gap-2">
+		<Button onClick={onSave} disabled={isSaving || isInputLocked || isTracking}>
+			{isSaving ? 'Speichert...' : isEditing ? 'Aktualisieren' : 'Speichern'}
+		</Button>
+
+		{#if isEditing}
+			<Button onClick={onCancelEdit} variant="secondary">Abbrechen</Button>
+		{/if}
+	</div>
+	{#if !isEditing}
+		<div class="mt-1 grid grid-cols-2 gap-2">
+			<Button onClick={onToggleTracking} disabled={isSaving} variant="secondary">
+				{#if isTracking}
+					<Square size="16" />
+					Stop
+				{:else}
+					<Play size="16" />
+					Start
+				{/if}
+			</Button>
+
+			<Button onClick={onTogglePause} disabled={isSaving || !isTracking} variant="secondary">
+				<Pause size="16" />
+				{isPaused ? 'Weiter' : 'Pause'}
+			</Button>
+		</div>
+	{/if}
 	{#if !isEditing && isTracking}
 		<div class="mt-1 flex flex-wrap items-center gap-2 text-xs">
 			<span class="rounded-lg border border-(--border) px-2 py-1 text-(--muted)">
@@ -62,53 +100,6 @@
 			{/if}
 		</div>
 	{/if}
-	<TimeGroup bind:startHour bind:startMinute bind:endHour bind:endMinute disabled={isInputLocked} />
-	{#if !isEditing}
-		<div class="mt-1 grid grid-cols-2 gap-2">
-			<button
-				type="button"
-				onclick={onToggleTracking}
-				disabled={isSaving}
-				class="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-(--border) bg-transparent px-4 text-sm font-semibold text-(--text) transition hover:border-(--accent) disabled:cursor-not-allowed disabled:opacity-60"
-			>
-				{#if isTracking}
-					<Square size="16" />
-					Stop
-				{:else}
-					<Play size="16" />
-					Play
-				{/if}
-			</button>
-			<button
-				type="button"
-				onclick={onTogglePause}
-				disabled={isSaving || !isTracking}
-				class="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-(--border) bg-transparent px-4 text-sm font-semibold text-(--text) transition hover:border-(--accent) disabled:cursor-not-allowed disabled:opacity-60"
-			>
-				<Pause size="16" />
-				{isPaused ? 'Resume' : 'Pause'}
-			</button>
-		</div>
-	{/if}
-	<div class="mt-1 grid {isEditing ? 'grid-cols-2' : ''} gap-2">
-		<button
-			type="button"
-			onclick={onSave}
-			disabled={isSaving || isInputLocked || isTracking}
-			class="inline-flex h-11 items-center justify-center rounded-xl bg-(--accent) px-4 text-sm font-semibold text-(--text) transition-opacity hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
-		>
-			{isSaving ? 'Speichert...' : isEditing ? 'Aktualisieren' : 'Speichern'}
-		</button>
-		{#if isEditing}
-			<button
-				type="button"
-				onclick={onCancelEdit}
-				class="inline-flex h-11 items-center justify-center rounded-xl border border-(--border) bg-transparent px-4 text-sm font-semibold text-(--text) transition hover:border-(--accent)"
-			>
-				Abbrechen
-			</button>
-		{/if}
-	</div>
 	{#if feedback}
 		<p class="text-xs text-red-500 text-center">{feedback}</p>
 	{/if}
