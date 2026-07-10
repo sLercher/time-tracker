@@ -3,6 +3,20 @@ import adapter from '@sveltejs/adapter-auto';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
+
+/** @param {string | undefined} value */
+function normalizeBasePath(value) {
+	if (!value || value === '/') return '';
+
+	const trimmed = value.replace(/^\/+|\/+$/g, '');
+	if (!trimmed) return '';
+
+	return /** @type {`/${string}`} */ (`/${trimmed}`);
+}
+
+const basePath = normalizeBasePath(process.env.BASE_PATH);
+
+
 export default defineConfig({
 	plugins: [
 		tailwindcss(),
@@ -13,15 +27,9 @@ export default defineConfig({
 					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
 			},
 
-			// adapter-auto only supports some environments, see https://svelte.dev/docs/kit/adapter-auto for a list.
-			// If your environment is not supported, or you settled on a specific environment, switch out the adapter.
-			// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 			adapter: adapter(),
-
-			typescript: {
-				config: (config) => {
-					config.include.push('../drizzle.config.js');
-				}
+			paths: {
+				base: basePath
 			}
 		})
 	]
