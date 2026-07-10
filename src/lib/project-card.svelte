@@ -17,8 +17,8 @@
 	<div>
 		<CardHeader>Tätigkeit</CardHeader>
 		<CardDescription>
-			Bestimmen Sie das Projekt an dem Sie gerade arbeiten. Optional kann eine Beschreibung der
-			Tätigkeit angegeben werden.
+			Wählen Sie das Projekt aus, an dem Sie arbeiten. Optional können Sie eine kurze Beschreibung
+			der Tätigkeit hinterlegen.
 		</CardDescription>
 	</div>
 

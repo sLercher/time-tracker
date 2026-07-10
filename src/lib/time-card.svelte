@@ -55,9 +55,8 @@
 			{isEditing ? 'Eintrag bearbeiten' : 'Zeiterfassung'}
 		</CardHeader>
 		<CardDescription>
-			Definieren Sie die Start- und Endzeit und speichern Sie die gebuchte Zeit. Über die Buttons
-			können die Start- und Endzeiten automatisch wie mit einer Stoppuhr getrackt werden und Pausen
-			berücksichtigt werden.
+			Legen Sie die Start- und Endzeit fest und speichern Sie die erfasste Arbeitszeit. Alternativ
+			können die Zeiten über die Schaltflächen automatisch erfasst und Pausen berücksichtigt werden.
 		</CardDescription>
 	</div>
 	<TimeGroup bind:startHour bind:startMinute bind:endHour bind:endMinute disabled={isInputLocked} />

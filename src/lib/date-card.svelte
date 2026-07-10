@@ -18,8 +18,8 @@
 	<div>
 		<CardHeader>Datum</CardHeader>
 		<CardDescription>
-			Wählen Sie das Datum aus, für welches Sie die Zeiterfassung ausführen möchten. Die Eingaben
-			werden immer auf diesem Datum hinterlegt.
+			Wählen Sie das Datum aus, für das Sie Zeiten erfassen möchten. Alle Eingaben werden diesem
+			Datum zugeordnet.
 		</CardDescription>
 	</div>
 	<Date bind:selectedDate {onChange} {isInputLocked} />
