@@ -21,7 +21,10 @@
 	--muted: #9ca8ab;
 	--accent: #f0b100;
 	--accent-soft: #c49206;
-	--danger: #de2626;
+	--danger: #ff5d5b;
+	--danger-bg: #2a1114;
+	--danger-border: #6b1f28;
+	--danger-text: #f5c2c7;
 }
 
 :global(html),

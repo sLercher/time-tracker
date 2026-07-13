@@ -74,7 +74,7 @@
 </script>
 
 <div
-	class="grid h-10 grid-cols-[1fr_auto_1fr_auto] rounded-lg bg-(--surface-raised) text-(--text) items-center"
+	class="grid h-10 grid-cols-[1fr_auto_1fr_auto] rounded-lg bg-(--surface-raised) text-(--text) items-center transition focus-within:ring-3 focus-within:ring-(--ring)/50 focus-within:ring-offset-1 focus-within:ring-offset-(--ring)"
 >
 	<TimePickerInput
 		bind:input={hourInput}
@@ -100,7 +100,7 @@
 		onclick={useCurrentTime}
 		{disabled}
 		aria-label="Aktuelle Zeit verwenden"
-		class="flex cursor-pointer items-center justify-center bg-transparent px-2 text-(--text) outline-none transition hover:text-(--accent) focus:text-(--text) disabled:cursor-not-allowed disabled:opacity-60"
+		class="flex cursor-pointer items-center justify-center bg-transparent px-2 text-(--text) outline-none transition hover:text-(--accent) focus:text-(--accent) disabled:cursor-not-allowed disabled:opacity-60"
 	>
 		<Clock4 size="16" />
 	</button>

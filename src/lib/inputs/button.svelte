@@ -24,7 +24,7 @@
 			return 'bg-transparent border border-(--ring) text-(--text) hover:bg-(--surface-raised)';
 		}
 		if (variant === 'danger') {
-			return 'bg-red-400/50 text-red-400 hover:bg-red-400/60';
+			return 'bg-(--danger-bg) text-(--danger-text) border border-(--danger-border) hover:bg-(--danger-bg)/40 hover:text-(--danger-border)';
 		}
 		return '';
 	});
@@ -44,7 +44,7 @@
 	type="button"
 	onclick={onClick}
 	{disabled}
-	class="inline-flex gap-1 items-center justify-center rounded-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 {style} {sizing}"
+	class="inline-flex gap-1 items-center justify-center rounded-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 {sizing} transition {style}"
 >
 	{@render children?.()}
 </button>

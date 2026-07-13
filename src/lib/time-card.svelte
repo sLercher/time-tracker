@@ -1,7 +1,5 @@
 <script>
-	import Pause from '@lucide/svelte/icons/pause';
-	import Play from '@lucide/svelte/icons/play';
-	import Square from '@lucide/svelte/icons/square';
+	import CircleAlert from '@lucide/svelte/icons/circle-alert';
 
 	import Card from '$lib/card/card.svelte';
 	import CardHeader from '$lib/card/card-header.svelte';
@@ -9,24 +7,24 @@
 	import TimeGroup from '$lib/inputs/time-group/time-group.svelte';
 	import Button from '$lib/inputs/button.svelte';
 
+	import ToasterContainer from '$lib/toaster/toaster-container.svelte';
+	import ToasterHeader from '$lib/toaster/toaster-header.svelte';
+	import ToasterBody from '$lib/toaster/toaster-body.svelte';
+
 	/**
 	 * @type {{
-	 *   startHour?: string,
-	 *   startMinute?: string,
-	 *   endHour?: string,
-	 *   endMinute?: string,
-	 *   onSave?: () => void,
-	 *   onToggleTracking?: () => void,
-	 *   onTogglePause?: () => void,
-	 *   onCancelEdit?: () => void,
-	 *   isSaving?: boolean,
-	 *   feedback?: string,
-	 *   isEditing?: boolean,
-	 *   isTracking?: boolean,
-	 *   isPaused?: boolean,
-	 *   isInputLocked?: boolean,
-	 *   activeDurationLabel?: string,
-	 *   pausedDurationLabel?: string
+	 *   startHour?: string
+	 *   startMinute?: string
+	 *   endHour?: string
+	 *   endMinute?: string
+	 *   onSave?: () => void
+	 *   onCancelEdit?: () => void
+	 *   onFeedbackDismiss?: () => void
+	 *   isSaving?: boolean
+	 *   feedback?: string
+	 *   isEditing?: boolean
+	 *   isTracking?: boolean
+	 *   isInputLocked?: boolean
 	 * }}
 	 */
 	let {
@@ -35,17 +33,13 @@
 		endHour = $bindable(''),
 		endMinute = $bindable(''),
 		onSave = () => {},
-		onToggleTracking = () => {},
-		onTogglePause = () => {},
 		onCancelEdit = () => {},
+		onFeedbackDismiss = () => {},
 		isSaving = false,
 		feedback = '',
 		isEditing = false,
 		isTracking = false,
-		isPaused = false,
-		isInputLocked = false,
-		activeDurationLabel = '00:00:00',
-		pausedDurationLabel = '00:00:00'
+		isInputLocked = false
 	} = $props();
 </script>
 
@@ -69,37 +63,16 @@
 			<Button onClick={onCancelEdit} variant="secondary">Abbrechen</Button>
 		{/if}
 	</div>
-	{#if !isEditing}
-		<div class="mt-1 grid grid-cols-2 gap-2">
-			<Button onClick={onToggleTracking} disabled={isSaving} variant="secondary">
-				{#if isTracking}
-					<Square size="16" />
-					Stop
-				{:else}
-					<Play size="16" />
-					Start
-				{/if}
-			</Button>
 
-			<Button onClick={onTogglePause} disabled={isSaving || !isTracking} variant="secondary">
-				<Pause size="16" />
-				{isPaused ? 'Weiter' : 'Pause'}
-			</Button>
-		</div>
-	{/if}
-	{#if !isEditing && isTracking}
-		<div class="mt-1 flex flex-wrap items-center gap-2 text-xs">
-			<span class="rounded-lg border border-(--border) px-2 py-1 text-(--muted)">
-				Timer: {activeDurationLabel}
-			</span>
-			{#if isPaused}
-				<span class="rounded-lg border border-(--border) px-2 py-1 text-(--muted)">
-					Pause: {pausedDurationLabel}
-				</span>
-			{/if}
-		</div>
-	{/if}
-	{#if feedback}
-		<p class="text-xs text-red-500 text-center">{feedback}</p>
-	{/if}
+	<ToasterContainer show={Boolean(feedback)} onDismiss={onFeedbackDismiss}>
+		<ToasterHeader>
+			<CircleAlert size="16" />
+			<h1>Zeit kann nicht gebucht werden.</h1>
+		</ToasterHeader>
+		<ToasterBody>
+			<ul class="list-disc">
+				<li>{feedback}</li>
+			</ul>
+		</ToasterBody>
+	</ToasterContainer>
 </Card>
