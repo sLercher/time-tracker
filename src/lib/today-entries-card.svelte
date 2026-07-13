@@ -51,12 +51,12 @@
 	{:else}
 		<div class="grid gap-2">
 			{#each entries as entry (entry.id)}
-				<div class="rounded-xl border border-(--border) bg-(--surface) px-3 py-3">
+				<div class="rounded-xl overflow-x-hidden border border-(--border) bg-(--surface) px-3 py-3">
 					<div class="flex items-start justify-between gap-3">
 						<div class="min-w-0">
-							<p class="truncate text-sm font-semibold">{entry.project}</p>
+							<p class="text-sm font-semibold">{entry.project}</p>
 							{#if entry.description}
-								<p class="truncate text-xs text-(--muted)">{entry.description}</p>
+								<span class="text-xs text-(--muted)">{entry.description}</span>
 							{/if}
 						</div>
 						<div class="flex items-center gap-1">

@@ -6,6 +6,7 @@
 	import CardHeader from '$lib/card/card-header.svelte';
 	import CardDescription from '$lib/card/card-description.svelte';
 	import Input from '$lib/inputs/input.svelte';
+	import TextArea from '$lib/inputs/text-area.svelte';
 
 	/**
 	 * @type {{ project?: string, description?: string, disabled?: boolean }}
@@ -30,7 +31,7 @@
 			bind:value={project}
 			{disabled}
 		/>
-		<Input
+		<TextArea
 			label="Beschreibung"
 			placeholder="Planerstellung"
 			image={TextAlignStart}
