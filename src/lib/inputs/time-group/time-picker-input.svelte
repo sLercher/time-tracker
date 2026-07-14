@@ -19,6 +19,15 @@
 		handleBlur = () => {},
 		handleKeyDown = () => {}
 	} = $props();
+
+	/**
+	 * Handles the focus event and selects the target input.
+	 * @param {FocusEvent} event the current event handler.
+	 */
+	function onfocus(event) {
+		const target = /** @type {HTMLInputElement} */ (event.target);
+		target.select();
+	}
 </script>
 
 <input
@@ -29,6 +38,7 @@
 	oninput={handleInput}
 	onblur={handleBlur}
 	onkeydown={handleKeyDown}
+	{onfocus}
 	type="text"
 	inputmode="numeric"
 	placeholder="00"

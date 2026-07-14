@@ -27,8 +27,29 @@
 		const input = /** @type {HTMLInputElement} */ (event.currentTarget);
 		hour = util.onlyDigits(input.value);
 		if (hour.length === 2) {
-			hour = util.clamp(hour, 23);
-			minuteInput?.focus();
+			handleHourBlurAndFocus();
+		}
+	}
+
+	/*** Handles the hour blur event. */
+	function handleHourBlur() {
+		hour = util.clamp(hour, 23);
+	}
+
+	/** Handles the minute blur and focus. */
+	function handleHourBlurAndFocus() {
+		handleHourBlur();
+		minuteInput?.focus();
+	}
+
+	/**
+	 * Handles the hour key down event.
+	 *
+	 * @param {KeyboardEvent} event the current event handler.
+	 */
+	function handleHourKeydown(event) {
+		if (event.key === 'Enter') {
+			handleHourBlurAndFocus();
 		}
 	}
 
@@ -41,19 +62,19 @@
 		const input = /** @type {HTMLInputElement} */ (event.currentTarget);
 		minute = util.onlyDigits(input.value);
 		if (minute.length === 2) {
-			minute = util.clamp(minute, 59);
-			minuteInput?.blur();
+			handleMinuteBlurAndFocus();
 		}
-	}
-
-	/*** Handles the hour blur event. */
-	function handleHourBlur() {
-		hour = util.clamp(hour, 23);
 	}
 
 	/*** Handles the minute blur event. */
 	function handleMinuteBlur() {
 		minute = util.clamp(minute, 59);
+	}
+
+	/** Handles the minute blur and focus. */
+	function handleMinuteBlurAndFocus() {
+		handleMinuteBlur();
+		minuteInput?.blur();
 	}
 
 	/**
@@ -62,7 +83,9 @@
 	 * @param {KeyboardEvent} event the current event handler.
 	 */
 	function handleMinuteKeydown(event) {
-		if (event.key === 'Backspace' && minute === '') {
+		if (event.key === 'Enter') {
+			handleMinuteBlurAndFocus();
+		} else if (event.key === 'Backspace' && minute === '') {
 			hourInput?.focus();
 		}
 	}
@@ -83,6 +106,7 @@
 		ariaLabel="Stunden"
 		handleInput={handleHourInput}
 		handleBlur={handleHourBlur}
+		handleKeyDown={handleHourKeydown}
 	/>
 	<p class="text-sm text-(--ring)">:</p>
 	<TimePickerInput

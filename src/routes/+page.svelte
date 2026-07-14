@@ -62,7 +62,6 @@
 	 */
 	async function handleDateChange() {
 		feedback = '';
-		resetForm();
 		await loadEntriesForSelectedDate();
 	}
 
@@ -178,9 +177,7 @@
 	}
 </script>
 
-<main
-	class="mx-auto flex min-h-screen w-full max-w-xl flex-col gap-4 px-4 pb-8 pt-6 sm:gap-5 sm:px-6 sm:pt-10"
->
+<main class="mx-auto flex min-h-screen w-full max-w-xl flex-col gap-4 px-4 py-3 sm:gap-5">
 	<DateCard bind:selectedDate onChange={handleDateChange}></DateCard>
 	<ProjectCard bind:project bind:description />
 	<TimeCard
@@ -203,8 +200,6 @@
 		onDelete={handleDeleteEntry}
 	/>
 </main>
-
-<div class="h-6" aria-hidden="true"></div>
 
 <svelte:head>
 	<title>Time Tracker</title>
